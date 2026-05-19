@@ -111,6 +111,7 @@ export function ProfileForm({ userId, initialProfile }: ProfileFormProps) {
     initialProfile?.partying_level ?? null
   );
   const [sportsInterest, setSportsInterest] = useState(initialProfile?.sports_interest ?? "");
+  const [email, setEmail] = useState(initialProfile?.email ?? "");
   const [studyLevel, setStudyLevel] = useState<number | null>(
     initialProfile?.study_oriented_level ?? null
   );
@@ -151,6 +152,7 @@ export function ProfileForm({ userId, initialProfile }: ProfileFormProps) {
       sleep_schedule: sleepSchedule,
       partying_level: partyingLevel,
       sports_interest: sportsInterest.trim(),
+      email: email.trim(),
       study_oriented_level: studyLevel,
       social_exposure_level: socialLevel,
       hobbies,
@@ -188,7 +190,7 @@ export function ProfileForm({ userId, initialProfile }: ProfileFormProps) {
             Campus
           </span>
           <h2 className="mt-1 font-[family-name:var(--font-display)] text-xl font-bold">
-            School & major
+            School & major & email
           </h2>
         </div>
         <div className="mt-6 grid gap-4 sm:grid-cols-2">
@@ -207,6 +209,14 @@ export function ProfileForm({ userId, initialProfile }: ProfileFormProps) {
             value={major}
             onChange={(e) => setMajor(e.target.value)}
             required
+          />
+          <Input
+            name="email"
+            label="Email"
+            placeholder="example@email.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required={false}
           />
         </div>
       </Card>

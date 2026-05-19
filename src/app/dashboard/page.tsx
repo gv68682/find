@@ -30,6 +30,7 @@ export default async function DashboardPage() {
   const publicProfile: PublicProfile = {
     college_name: profile!.college_name,
     major: profile!.major,
+    email: profile!.email,
     gender: profile!.gender,
     sleep_schedule: profile!.sleep_schedule,
     partying_level: profile!.partying_level,

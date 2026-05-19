@@ -14,9 +14,9 @@ export function Hero() {
 
         <h1 className="font-[family-name:var(--font-display)] text-4xl font-extrabold leading-[1.1] tracking-tight sm:text-6xl lg:text-7xl">
           Find your{" "}
-          <span className="text-gradient">perfect roommate</span>
+          <span className="text-gradient">perfect college roommate</span>
           <br />
-          before move-in day
+          before freshman week
         </h1>
 
         <p className="mx-auto mt-6 max-w-xl text-lg text-muted sm:text-xl">

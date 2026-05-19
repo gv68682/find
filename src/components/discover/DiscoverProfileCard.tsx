@@ -16,12 +16,17 @@ export function DiscoverProfileCard({ profile }: DiscoverProfileCardProps) {
           <p className="font-[family-name:var(--font-display)] text-xl font-bold text-gradient">
             {profile.major}
           </p>
+          <p className="font-[family-name:var(--font-display)] text-xl font-bold text-gradient">
+            ({profile.email ?? "Anonymous"})
+          </p>
           <span className="mt-1 inline-block rounded-full bg-violet-50 px-2.5 py-0.5 text-xs font-medium text-violet-600">
             Anonymous
           </span>
         </div>
       </header>
-
+      <section className="mt-auto border-t border-violet-50 pt-4">
+        
+      </section>
       <section className="mb-4">
         <h3 className="text-xs font-semibold uppercase tracking-wider text-muted">Habits</h3>
         <ul className="mt-2 flex flex-wrap gap-2">

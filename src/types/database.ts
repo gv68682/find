@@ -5,6 +5,7 @@ export type Profile = {
   gender: string | null;
   sleep_schedule: string | null;
   partying_level: number | null;
+  email: string | null;
   sports_interest: string | null;
   study_oriented_level: number | null;
   social_exposure_level: number | null;
@@ -23,6 +24,7 @@ export type PublicProfile = Pick<
   | "sleep_schedule"
   | "partying_level"
   | "sports_interest"
+  | "email"
   | "study_oriented_level"
   | "social_exposure_level"
   | "hobbies"

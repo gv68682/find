@@ -15,6 +15,7 @@ function toPublicProfile(profile: Profile): PublicProfile {
   return {
     college_name: profile.college_name,
     major: profile.major,
+    email: profile.email,
     gender: profile.gender,
     sleep_schedule: profile.sleep_schedule,
     partying_level: profile.partying_level,

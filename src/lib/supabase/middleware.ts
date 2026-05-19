@@ -6,7 +6,7 @@ import type { Profile } from "@/types/database";
 const AUTH_ROUTES = ["/login", "/register", "/forgot-password"];
 const PROTECTED_PREFIXES = ["/dashboard", "/onboarding", "/discover", "/matches"];
 const PROFILE_SELECT =
-  "college_name, major, gender, sleep_schedule, partying_level, sports_interest, study_oriented_level, social_exposure_level, hobbies, bio";
+  "college_name, major, gender, sleep_schedule, partying_level, sports_interest, study_oriented_level, social_exposure_level, hobbies, bio, email";
 
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({ request });
