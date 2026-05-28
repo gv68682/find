@@ -1,10 +1,14 @@
-import { pipeline, env } from "@xenova/transformers";
+//import { pipeline, env } from "@xenova/transformers";
+import { pipeline, env } from "@huggingface/transformers";
 
 // Force WASM-only — no native binaries, works on Vercel serverless
-env.backends.onnx.wasm.numThreads = 1;
+if (env.backends?.onnx?.wasm) {
+  env.backends.onnx.wasm.numThreads = 1;
+}
 env.allowLocalModels = false;
 
-const MODEL_ID = "Xenova/all-MiniLM-L6-v2"; // 384-dim, WASM-only, no .so needed
+//const MODEL_ID = "Xenova/all-MiniLM-L6-v2"; // 384-dim, WASM-only, no .so needed
+const MODEL_ID = "Xenova/all-MiniLM-L6-v2";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 let extractor: any = null;
