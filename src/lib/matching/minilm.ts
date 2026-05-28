@@ -1,4 +1,3 @@
-//import { pipeline, env } from "@xenova/transformers";
 import { pipeline, env } from "@huggingface/transformers";
 
 // Force WASM-only — no native binaries, works on Vercel serverless
@@ -7,8 +6,7 @@ if (env.backends?.onnx?.wasm) {
 }
 env.allowLocalModels = false;
 
-//const MODEL_ID = "Xenova/all-MiniLM-L6-v2"; // 384-dim, WASM-only, no .so needed
-const MODEL_ID = "Xenova/all-MiniLM-L6-v2";
+const MODEL_ID = "Xenova/all-MiniLM-L6-v2"; // 384-dim, WASM-only, no .so needed
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 let extractor: any = null;
@@ -19,9 +17,7 @@ async function getExtractor() {
   if (loadError) throw new Error(loadError);
 
   try {
-    extractor = await pipeline("feature-extraction", MODEL_ID, {
-      quantized: true,
-    });
+    extractor = await pipeline("feature-extraction", MODEL_ID);
     return extractor;
   } catch (err) {
     loadError = err instanceof Error ? err.message : "Failed to load MiniLM";
