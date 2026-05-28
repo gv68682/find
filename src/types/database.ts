@@ -13,6 +13,7 @@ export type Profile = {
   bio: string | null;
   created_at: string;
   updated_at: string;
+  embedding?: number[]; // add Profile type in types/database.ts
 };
 
 /** Safe fields for discovery — no email, name, or auth identifiers */

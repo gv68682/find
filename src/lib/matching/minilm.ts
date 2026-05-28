@@ -1,9 +1,10 @@
 import { pipeline, env } from "@xenova/transformers";
 
-env.cacheDir = ".cache/transformers";
-env.allowLocalModels = true;
+// Force WASM-only — no native binaries, works on Vercel serverless
+env.backends.onnx.wasm.numThreads = 1;
+env.allowLocalModels = false;
 
-const MODEL_ID = "Xenova/bge-m3";
+const MODEL_ID = "Xenova/all-MiniLM-L6-v2"; // 384-dim, WASM-only, no .so needed
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 let extractor: any = null;
@@ -19,13 +20,13 @@ async function getExtractor() {
     });
     return extractor;
   } catch (err) {
-    loadError = err instanceof Error ? err.message : "Failed to load BGE-M3";
+    loadError = err instanceof Error ? err.message : "Failed to load MiniLM";
     throw new Error(loadError);
   }
 }
 
-/** BGE-M3 embedding with mean pooling + L2 normalize (cosine-ready) */
-export async function embedWithBgeM3(text: string): Promise<number[]> {
+/** MiniLM embedding with mean pooling + L2 normalize (cosine-ready, 384-dim) */
+export async function embedText(text: string): Promise<number[]> {
   const model = await getExtractor();
   const output = await model(text, { pooling: "mean", normalize: true });
   return Array.from(output.data as Float32Array);

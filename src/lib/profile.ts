@@ -28,4 +28,4 @@ export function getPostAuthPath(profile: Profile | null | undefined): "/dashboar
 }
 
 export const PROFILE_FIELDS =
-  "id, college_name, major, gender, sleep_schedule, partying_level, sports_interest, study_oriented_level, social_exposure_level, hobbies, bio, created_at, updated_at" as const;
+  "id, college_name, major, gender, sleep_schedule, partying_level, sports_interest, study_oriented_level, social_exposure_level, hobbies, bio, embedding, created_at, updated_at" as const;

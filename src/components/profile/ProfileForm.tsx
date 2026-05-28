@@ -178,6 +178,9 @@ export function ProfileForm({ userId, initialProfile }: ProfileFormProps) {
       return;
     }
 
+    // Generate and store embedding server-side (non-blocking — if it fails, matching still works)
+    fetch("/api/embed-profile", { method: "POST" }).catch(() => null);
+
     router.push("/dashboard");
     router.refresh();
   }

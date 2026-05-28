@@ -1,7 +1,7 @@
 import type { Profile } from "@/types/database";
 import { getAnonymousLabel, isProfileComplete } from "@/lib/profile";
 import { profileToMatchingText } from "@/lib/matching/profile-text";
-import { embedWithBgeM3, getModelId } from "@/lib/matching/bge-m3";
+import { embedText, getModelId } from "@/lib/matching/minilm";
 import { cosineSimilarity, cosineToUnit } from "@/lib/matching/cosine";
 import { scoreLifestyle } from "@/lib/matching/lifestyle-score";
 import type { PublicProfile } from "@/types/database";
@@ -32,36 +32,38 @@ export async function findTopMatches(
   candidates: Profile[]
 ): Promise<SafeMatch[]> {
   const eligible = candidates.filter(
-    (p) => p.id !== user.id && isProfileComplete(p)
+    (p) =>
+      p.id !== user.id &&
+      isProfileComplete(p) &&
+      p.gender === user.gender
   );
 
   if (eligible.length === 0) return [];
 
-  const userText = profileToMatchingText(user);
-  let userEmbedding: number[];
-
-  try {
-    userEmbedding = await embedWithBgeM3(userText);
-  } catch {
-    userEmbedding = [];
+  // Use stored embedding if available, otherwise compute on the fly
+  let userEmbedding: number[] = [];
+  if (user.embedding && user.embedding.length > 0) {
+    userEmbedding = user.embedding;
+  } else {
+    try {
+      userEmbedding = await embedText(profileToMatchingText(user));
+    } catch {
+      userEmbedding = [];
+    }
   }
 
-  const candidateEmbeddings = await Promise.all(
-    eligible.map(async (p) => {
-      try {
-        return await embedWithBgeM3(profileToMatchingText(p));
-      } catch {
-        return [] as number[];
-      }
-    })
-  );
-
-  const scored = eligible.map((candidate, index) => {
+  const scored = eligible.map((candidate) => {
     const lifestyle = scoreLifestyle(user, candidate);
     let semantic = 0.5;
 
-    if (userEmbedding.length > 0 && candidateEmbeddings[index]!.length > 0) {
-      const cosine = cosineSimilarity(userEmbedding, candidateEmbeddings[index]!);
+    // Use stored embedding if available, otherwise compute on the fly
+    const candidateEmbedding: number[] =
+      candidate.embedding && candidate.embedding.length > 0
+        ? candidate.embedding
+        : [];
+
+    if (userEmbedding.length > 0 && candidateEmbedding.length > 0) {
+      const cosine = cosineSimilarity(userEmbedding, candidateEmbedding);
       semantic = cosineToUnit(cosine);
     }
 
