@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { fetchUserProfile } from "@/lib/supabase/profile";
-import { upsertProfileEmbedding } from "@/lib/matching/embed-profile";
+import { upsertProfileEmbedding } from "../../../lib/matching/embed-profile";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
