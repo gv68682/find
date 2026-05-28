@@ -1,37 +1,18 @@
-import { pipeline, env } from "@huggingface/transformers";
-
-// Force WASM-only — no native binaries, works on Vercel serverless
-if (env.backends?.onnx?.wasm) {
-  env.backends.onnx.wasm.numThreads = 1;
-}
-env.allowLocalModels = false;
-
-const MODEL_ID = "Xenova/all-MiniLM-L6-v2"; // 384-dim, WASM-only, no .so needed
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-let extractor: any = null;
-let loadError: string | null = null;
-
-async function getExtractor() {
-  if (extractor) return extractor;
-  if (loadError) throw new Error(loadError);
-
+export async function embedText(text: string): Promise<number[]> {
   try {
-    extractor = await pipeline("feature-extraction", MODEL_ID);
-    return extractor;
-  } catch (err) {
-    loadError = err instanceof Error ? err.message : "Failed to load MiniLM";
-    throw new Error(loadError);
+    const { pipeline, env } = await import("@huggingface/transformers");
+    if (env.backends?.onnx?.wasm) {
+      env.backends.onnx.wasm.numThreads = 1;
+    }
+    env.allowLocalModels = false;
+    const model = await pipeline("feature-extraction", "Xenova/all-MiniLM-L6-v2");
+    const output = await model(text, { pooling: "mean", normalize: true });
+    return Array.from(output.data as Float32Array);
+  } catch {
+    return []; // falls back to lifestyle-only scoring in engine.ts
   }
 }
 
-/** MiniLM embedding with mean pooling + L2 normalize (cosine-ready, 384-dim) */
-export async function embedText(text: string): Promise<number[]> {
-  const model = await getExtractor();
-  const output = await model(text, { pooling: "mean", normalize: true });
-  return Array.from(output.data as Float32Array);
-}
-
 export function getModelId(): string {
-  return MODEL_ID;
+  return "Xenova/all-MiniLM-L6-v2";
 }
